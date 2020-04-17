@@ -43,6 +43,9 @@ const sVertical = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
   },
+  formContainer: {
+    width: '100%',
+  },
   inputContainer: {
   },
   inputLabel: {
@@ -99,7 +102,7 @@ export default class CreditCardInput extends Component {
     },
     placeholders: {
       name: "Full Name",
-      number: "1234 5678 1234 5678",
+      number: "**** **** **** ****",
       expiry: "MM/YY",
       cvc: "CVC",
       postalCode: "34567",
@@ -123,7 +126,7 @@ export default class CreditCardInput extends Component {
 
   _focus = field => {
     if (!field) return;
-    if (this.props.useVertical) return // no scrolling when focus
+
     const scrollResponder = this.refs.Form.getScrollResponder();
     const nodeHandle = ReactNative.findNodeHandle(this.refs[field]);
 
@@ -188,7 +191,9 @@ export default class CreditCardInput extends Component {
           keyboardShouldPersistTaps="always"
           scrollEnabled={allowScroll}
           showsHorizontalScrollIndicator={false}
-          style={styles.form}>
+          style={styles.form}
+          contentContainerStyle={styles.formContainer}
+          >
           <CCInput {...this._inputProps("number")}
             keyboardType="numeric"
             containerStyle={[styles.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH }]} />
