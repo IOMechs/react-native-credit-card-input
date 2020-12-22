@@ -9,6 +9,7 @@ import ReactNative, {
   Dimensions,
   TextInput,
   ViewPropTypes,
+  I18nManager,
 } from "react-native";
 
 import CreditCard from "./CardView";
@@ -70,9 +71,11 @@ export default class CreditCardInput extends Component {
   static propTypes = {
     ...InjectedProps,
     labels: PropTypes.object,
+    arabicLabel: PropTypes.object,
     placeholders: PropTypes.object,
 
     labelStyle: Text.propTypes.style,
+    arabicLabelStyle: Text.propTypes.style,
     inputStyle: Text.propTypes.style,
     inputContainerStyle: ViewPropTypes.style,
 
@@ -100,6 +103,12 @@ export default class CreditCardInput extends Component {
       cvc: "CVC/CCV",
       postalCode: "POSTAL CODE",
     },
+    arabicLabels: {
+      number: 'رقم البطاقة',
+      expiry: 'انقضاء',
+      cvc: 'رمز الامان',
+      name: 'إسم صاحب البطاقة',
+    },
     placeholders: {
       name: "Full Name",
       number: "**** **** **** ****",
@@ -118,7 +127,9 @@ export default class CreditCardInput extends Component {
     additionalInputsProps: {},
   };
 
-  componentDidMount = () => this._focus(this.props.focused);
+  componentDidMount = () => {
+    this._focus(this.props.focused);
+  };
 
   componentWillReceiveProps = newProps => {
     if (this.props.focused !== newProps.focused) this._focus(newProps.focused);
@@ -126,7 +137,6 @@ export default class CreditCardInput extends Component {
 
   _focus = field => {
     if (!field) return;
-
     const scrollResponder = this.refs.Form.getScrollResponder();
     const nodeHandle = ReactNative.findNodeHandle(this.refs[field]);
 
@@ -141,19 +151,21 @@ export default class CreditCardInput extends Component {
   _inputProps = field => {
     const {
       inputStyle, labelStyle, validColor, invalidColor, placeholderColor,
-      placeholders, labels, values, status,
+      placeholders, labels, arabicLabels, values, status,
       onFocus, onChange, onBecomeEmpty, onBecomeValid,
-      additionalInputsProps, useVertical
+      additionalInputsProps, useVertical, arabicLabelStyle,
     } = this.props;
     const style = useVertical ? sVertical : sHorizontal
 
     return {
       inputStyle: [style.input, inputStyle],
       labelStyle: [style.inputLabel, labelStyle],
+      arabicLabelStyle: [style.inputLabel, arabicLabelStyle],
       validColor, invalidColor, placeholderColor,
       ref: field, field,
 
       label: labels[field],
+      arabicLabel: arabicLabels[field],
       placeholder: placeholders[field],
       value: values[field],
       status: status[field],
@@ -201,7 +213,7 @@ export default class CreditCardInput extends Component {
           { requiresName &&
             <CCInput {...this._inputProps("name")}
               containerStyle={[styles.inputContainer, inputContainerStyle, { width: '100%' }]} /> }
-          <View style={{display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
+          <View style={[{display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}, I18nManager.isRTL && {flexDirection: 'row-reverse'}]}>
             <CCInput {...this._inputProps("expiry")}
               keyboardType="numeric"
               parentContainer={{width: '50%'}}

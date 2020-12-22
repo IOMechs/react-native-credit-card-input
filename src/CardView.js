@@ -7,6 +7,7 @@ import {
   Text,
   StyleSheet,
   Platform,
+  I18nManager,
 } from "react-native";
 
 import defaultIcons from "./Icons";
@@ -20,7 +21,7 @@ const s = StyleSheet.create({
   icon: {
     position: "absolute",
     top: 15,
-    right: 15,
+    right: I18nManager.isRTL ? 0 : 15,
     width: 60,
     height: 40,
     resizeMode: "contain",
@@ -40,26 +41,29 @@ const s = StyleSheet.create({
     fontSize: 21,
     position: "absolute",
     top: 95,
-    left: 28,
+    right: I18nManager.isRTL ? 28 : 0,
+    left: I18nManager.isRTL ? 0 : 28,
   },
   name: {
     fontSize: 16,
     position: "absolute",
     bottom: 20,
-    left: 25,
-    right: 100,
+    right: I18nManager.isRTL ? 25 : 100,
+    left: I18nManager.isRTL ? 100 : 25,
   },
   expiryLabel: {
     fontSize: 9,
     position: "absolute",
     bottom: 40,
-    left: 218,
+    right: I18nManager.isRTL ? 218 : 0,
+    left: I18nManager.isRTL ? 0 : 218,
   },
   expiry: {
     fontSize: 16,
     position: "absolute",
     bottom: 20,
-    left: 220,
+    right: I18nManager.isRTL ? 220 : 0,
+    left: I18nManager.isRTL ? 0 : 220,
   },
   amexCVC: {
     fontSize: 16,
@@ -71,7 +75,6 @@ const s = StyleSheet.create({
     fontSize: 16,
     position: "absolute",
     top: 80,
-    right: 30,
   },
 });
 
@@ -135,7 +138,7 @@ export default class CardView extends Component {
           flip={shouldFlip}>
           <ImageBackground style={[BASE_SIZE, s.cardFace, transform]}
             source={imageFront}>
-              <Image style={[s.icon]} source={!isMADA ? Icons[brand] : Icons['mada']} />
+              <Image style={[s.icon, I18nManager.isRTL && {left: I18nManager.isRTL ? 15 : 0}]} source={!isMADA ? Icons[brand] : Icons['mada']} />
               <Text style={[s.baseText, { fontFamily }, s.number, !number && s.placeholder, focused === "number" && s.focused]}>
                 { !number ? placeholder.number : number }
               </Text>
@@ -156,7 +159,7 @@ export default class CardView extends Component {
           </ImageBackground>
           <ImageBackground style={[BASE_SIZE, s.cardFace, transform]}
             source={imageBack}>
-              <Text style={[s.baseText, s.cvc, !cvc && s.placeholder, focused === "cvc" && s.focused]}>
+              <Text style={[s.baseText, s.cvc, !cvc && s.placeholder, focused === "cvc" && s.focused, I18nManager.isRTL ? {left: 30} : {right: 30}]}>
                 { !cvc ? placeholder.cvc : cvc }
               </Text>
           </ImageBackground>
