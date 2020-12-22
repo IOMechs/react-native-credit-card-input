@@ -79,7 +79,7 @@ const s = StyleSheet.create({
 export default class CardView extends Component {
   static propTypes = {
     focused: PropTypes.string,
-
+    isMADA: PropTypes.bool,
     brand: PropTypes.string,
     name: PropTypes.string,
     number: PropTypes.string,
@@ -107,13 +107,13 @@ export default class CardView extends Component {
     fontFamily: Platform.select({ ios: "Courier", android: "monospace" }),
     imageFront: require("../images/card-front.png"),
     imageBack: require("../images/card-back.png"),
+    isMADA: false,
   };
 
   render() {
     const { focused,
       brand, name, number, expiry, cvc, customIcons,
-      placeholder, imageFront, imageBack, scale, fontFamily } = this.props;
-
+      placeholder, imageFront, imageBack, scale, fontFamily, isMADA } = this.props;
     const Icons = { ...defaultIcons, ...customIcons };
     const isAmex = brand === "american-express";
     const shouldFlip = !isAmex && focused === "cvc";
@@ -135,8 +135,7 @@ export default class CardView extends Component {
           flip={shouldFlip}>
           <ImageBackground style={[BASE_SIZE, s.cardFace, transform]}
             source={imageFront}>
-              <Image style={[s.icon]}
-                source={Icons[brand]} />
+              <Image style={[s.icon]} source={!isMADA ? Icons[brand] : Icons['mada']} />
               <Text style={[s.baseText, { fontFamily }, s.number, !number && s.placeholder, focused === "number" && s.focused]}>
                 { !number ? placeholder.number : number }
               </Text>

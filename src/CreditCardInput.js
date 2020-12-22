@@ -57,7 +57,7 @@ const sVertical = StyleSheet.create({
   },
 });
 
-const CVC_INPUT_WIDTH = 70;
+const CVC_INPUT_WIDTH = 100;
 const EXPIRY_INPUT_WIDTH = CVC_INPUT_WIDTH;
 const CARD_NUMBER_INPUT_WIDTH_OFFSET = 40;
 const CARD_NUMBER_INPUT_WIDTH = Dimensions.get("window").width - EXPIRY_INPUT_WIDTH - CARD_NUMBER_INPUT_WIDTH_OFFSET;
@@ -169,7 +169,7 @@ export default class CreditCardInput extends Component {
       cardImageFront, cardImageBack, inputContainerStyle,
       values: { number, expiry, cvc, name, type }, focused,
       allowScroll, requiresName, requiresCVC, requiresPostalCode,
-      cardScale, cardFontFamily, cardBrandIcons, useVertical
+      cardScale, cardFontFamily, cardBrandIcons, useVertical, isMADA
     } = this.props;
     const styles = useVertical ? sVertical : sHorizontal
     return (
@@ -184,7 +184,8 @@ export default class CreditCardInput extends Component {
           name={requiresName ? name : " "}
           number={number}
           expiry={expiry}
-          cvc={cvc} />
+          cvc={cvc}
+          isMADA={isMADA}/>
         <ScrollView ref="Form"
           horizontal={useVertical ? false : true}
           vertical={useVertical ? false : true}
@@ -196,17 +197,21 @@ export default class CreditCardInput extends Component {
           >
           <CCInput {...this._inputProps("number")}
             keyboardType="numeric"
-            containerStyle={[styles.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH }]} />
-          <CCInput {...this._inputProps("expiry")}
-            keyboardType="numeric"
-            containerStyle={[styles.inputContainer, inputContainerStyle, { width: EXPIRY_INPUT_WIDTH }]} />
-          { requiresCVC &&
-            <CCInput {...this._inputProps("cvc")}
-              keyboardType="numeric"
-              containerStyle={[styles.inputContainer, inputContainerStyle, { width: CVC_INPUT_WIDTH }]} /> }
+            containerStyle={[styles.inputContainer, inputContainerStyle, { width: '100%' }]} />
           { requiresName &&
             <CCInput {...this._inputProps("name")}
-              containerStyle={[styles.inputContainer, inputContainerStyle, { width: NAME_INPUT_WIDTH }]} /> }
+              containerStyle={[styles.inputContainer, inputContainerStyle, { width: '100%' }]} /> }
+          <View style={{display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
+            <CCInput {...this._inputProps("expiry")}
+              keyboardType="numeric"
+              parentContainer={{width: '50%'}}
+              containerStyle={[styles.inputContainer, inputContainerStyle, { width: '98%'}]} />
+            { requiresCVC &&
+              <CCInput {...this._inputProps("cvc")}
+                parentContainer={{width: '50%'}}
+                keyboardType="numeric"
+                containerStyle={[styles.inputContainer, inputContainerStyle, { width: '98%'}]} /> }
+          </View>
           { requiresPostalCode &&
             <CCInput {...this._inputProps("postalCode")}
               keyboardType="numeric"
