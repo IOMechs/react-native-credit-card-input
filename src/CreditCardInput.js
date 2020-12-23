@@ -207,12 +207,12 @@ export default class CreditCardInput extends Component {
           style={styles.form}
           contentContainerStyle={styles.formContainer}
           >
-          <CCInput {...this._inputProps("number")}
-            keyboardType="numeric"
-            containerStyle={[styles.inputContainer, inputContainerStyle, { width: '100%' }]} />
           { requiresName &&
             <CCInput {...this._inputProps("name")}
               containerStyle={[styles.inputContainer, inputContainerStyle, { width: '100%' }]} /> }
+          <CCInput {...this._inputProps("number")}
+            keyboardType="numeric"
+            containerStyle={[styles.inputContainer, inputContainerStyle, { width: '100%' }]} />
           <View style={[{display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}, I18nManager.isRTL && {flexDirection: 'row-reverse'}]}>
             <CCInput {...this._inputProps("expiry")}
               keyboardType="numeric"
