@@ -14,6 +14,7 @@ const addGaps = (string = "", gaps) => {
 };
 
 const FALLBACK_CARD = { gaps: [4, 8, 12], lengths: [16], code: { size: 3 } };
+let previousExpiry = '';
 export default class CCFieldFormatter {
   constructor(displayedFields) {
     this._displayedFields = [...displayedFields, "type"];
@@ -42,8 +43,23 @@ export default class CCFieldFormatter {
 
   _formatExpiry = (expiry) => {
     const sanitized = limitLength(removeNonNumber(expiry), 4);
-    if (sanitized.match(/^[2-9]$/)) { return `0${sanitized}`; }
-    if (sanitized.length > 2) { return `${sanitized.substr(0, 2)}/${sanitized.substr(2, sanitized.length)}`; }
+    if (sanitized.match(/^[2-9]$/)) {
+      previousExpiry = `0${sanitized}`;
+      return previousExpiry;
+    }
+    if (previousExpiry[previousExpiry.length - 1] === '/' && expiry.length < 3) {
+      previousExpiry = `${sanitized}`;
+      return previousExpiry;
+    }
+    if (sanitized.length === 2) { 
+      previousExpiry = `${sanitized}/`;
+      return previousExpiry;
+    }
+    if (sanitized.length > 2) {
+      previousExpiry = `${sanitized.substr(0, 2)}/${sanitized.substr(2, sanitized.length)}`;
+      return previousExpiry;
+    }
+    previousExpiry = sanitized;
     return sanitized;
   };
 
