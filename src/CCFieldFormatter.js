@@ -44,7 +44,7 @@ export default class CCFieldFormatter {
   _formatExpiry = (expiry) => {
     const sanitized = limitLength(removeNonNumber(expiry), 4);
     if (sanitized.match(/^[2-9]$/)) {
-      previousExpiry = `0${sanitized}`;
+      previousExpiry = `0${sanitized}/`;
       return previousExpiry;
     }
     if (previousExpiry[previousExpiry.length - 1] === '/' && expiry.length < 3) {
