@@ -89,7 +89,7 @@ export default class CardView extends Component {
     expiry: PropTypes.string,
     cvc: PropTypes.string,
     placeholder: PropTypes.object,
-
+    isInstantBooking: PropTypes.bool,
     scale: PropTypes.number,
     fontFamily: PropTypes.string,
     imageFront: PropTypes.number,
@@ -108,60 +108,139 @@ export default class CardView extends Component {
 
     scale: 1,
     fontFamily: Platform.select({ ios: "Courier", android: "monospace" }),
-    imageFront: require("../images/card-front.png"),
-    imageBack: require("../images/card-back.png"),
+    imageFront: require(`..images/${
+      isInstantBooking ? `instant` : `normal`
+    }-card.png`),
+    imageBack: require(`..images/${
+      isInstantBooking ? `instant` : `normal`
+    }-card-back.png`),
     isMADA: false,
   };
 
   render() {
-    const { focused,
-      brand, name, number, expiry, cvc, customIcons,
-      placeholder, imageFront, imageBack, scale, fontFamily, isMADA } = this.props;
+    const {
+      focused,
+      brand,
+      name,
+      number,
+      expiry,
+      cvc,
+      customIcons,
+      placeholder,
+      imageFront,
+      imageBack,
+      scale,
+      fontFamily,
+      isMADA,
+    } = this.props;
     const Icons = { ...defaultIcons, ...customIcons };
     const isAmex = brand === "american-express";
     const shouldFlip = !isAmex && focused === "cvc";
 
     const containerSize = { ...BASE_SIZE, height: BASE_SIZE.height * scale };
-    const transform = { transform: [
-      { scale },
-      { translateY: ((BASE_SIZE.height * (scale - 1) / 2)) },
-    ] };
+    const transform = {
+      transform: [
+        { scale },
+        { translateY: (BASE_SIZE.height * (scale - 1)) / 2 },
+      ],
+    };
 
     return (
       <View style={[s.cardContainer, containerSize]}>
-        <FlipCard style={{ borderWidth: 0 }}
+        <FlipCard
+          style={{ borderWidth: 0 }}
           flipHorizontal
           flipVertical={false}
           friction={10}
           perspective={2000}
           clickable={false}
-          flip={shouldFlip}>
-          <ImageBackground style={[BASE_SIZE, s.cardFace, transform]}
-            source={imageFront}>
-              <Image style={[s.icon, I18nManager.isRTL && {left: I18nManager.isRTL ? 15 : 0}]} source={!isMADA ? Icons[brand] : Icons['mada']} />
-              <Text style={[s.baseText, { fontFamily }, s.number, !number && s.placeholder, focused === "number" && s.focused]}>
-                { !number ? placeholder.number : number }
+          flip={shouldFlip}
+        >
+          <ImageBackground
+            style={[BASE_SIZE, s.cardFace, transform]}
+            source={imageFront}
+          >
+            <Image
+              style={[
+                s.icon,
+                I18nManager.isRTL && { left: I18nManager.isRTL ? 15 : 0 },
+              ]}
+              source={!isMADA ? Icons[brand] : Icons["mada"]}
+            />
+            <Text
+              style={[
+                s.baseText,
+                { fontFamily },
+                s.number,
+                !number && s.placeholder,
+                focused === "number" && s.focused,
+              ]}
+            >
+              {!number ? placeholder.number : number}
+            </Text>
+            <Text
+              style={[
+                s.baseText,
+                { fontFamily },
+                s.name,
+                !name && s.placeholder,
+                focused === "name" && s.focused,
+              ]}
+              numberOfLines={1}
+            >
+              {!name ? placeholder.name : name.toUpperCase()}
+            </Text>
+            <Text
+              style={[
+                s.baseText,
+                { fontFamily },
+                s.expiryLabel,
+                s.placeholder,
+                focused === "expiry" && s.focused,
+              ]}
+            >
+              MONTH/YEAR
+            </Text>
+            <Text
+              style={[
+                s.baseText,
+                { fontFamily },
+                s.expiry,
+                !expiry && s.placeholder,
+                focused === "expiry" && s.focused,
+              ]}
+            >
+              {!expiry ? placeholder.expiry : expiry}
+            </Text>
+            {isAmex && (
+              <Text
+                style={[
+                  s.baseText,
+                  { fontFamily },
+                  s.amexCVC,
+                  !cvc && s.placeholder,
+                  focused === "cvc" && s.focused,
+                ]}
+              >
+                {!cvc ? placeholder.cvc : cvc}
               </Text>
-              <Text style={[s.baseText, { fontFamily }, s.name, !name && s.placeholder, focused === "name" && s.focused]}
-                numberOfLines={1}>
-                { !name ? placeholder.name : name.toUpperCase() }
-              </Text>
-              <Text style={[s.baseText, { fontFamily }, s.expiryLabel, s.placeholder, focused === "expiry" && s.focused]}>
-                MONTH/YEAR
-              </Text>
-              <Text style={[s.baseText, { fontFamily }, s.expiry, !expiry && s.placeholder, focused === "expiry" && s.focused]}>
-                { !expiry ? placeholder.expiry : expiry }
-              </Text>
-              { isAmex &&
-                  <Text style={[s.baseText, { fontFamily }, s.amexCVC, !cvc && s.placeholder, focused === "cvc" && s.focused]}>
-                    { !cvc ? placeholder.cvc : cvc }
-                  </Text> }
+            )}
           </ImageBackground>
-          <ImageBackground style={[BASE_SIZE, s.cardFace, transform]}
-            source={imageBack}>
-              <Text style={[s.baseText, s.cvc, !cvc && s.placeholder, focused === "cvc" && s.focused, I18nManager.isRTL ? {left: 30} : {right: 30}]}>
-                { !cvc ? placeholder.cvc : cvc }
-              </Text>
+          <ImageBackground
+            style={[BASE_SIZE, s.cardFace, transform]}
+            source={imageBack}
+          >
+            <Text
+              style={[
+                s.baseText,
+                s.cvc,
+                !cvc && s.placeholder,
+                focused === "cvc" && s.focused,
+                I18nManager.isRTL ? { left: 30 } : { right: 30 },
+              ]}
+            >
+              {!cvc ? placeholder.cvc : cvc}
+            </Text>
           </ImageBackground>
         </FlipCard>
       </View>
