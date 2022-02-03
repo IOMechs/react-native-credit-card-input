@@ -36,24 +36,23 @@ const sHorizontal = StyleSheet.create({
 
 const sVertical = StyleSheet.create({
   container: {
-    width: '100%',
+    width: "100%",
     alignItems: "center",
   },
   form: {
-    width: '100%',
+    width: "100%",
     marginTop: 20,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   formContainer: {
-    width: '100%',
+    width: "100%",
   },
-  inputContainer: {
-  },
+  inputContainer: {},
   inputLabel: {
     fontWeight: "bold",
   },
   input: {
-    width: '100%',
+    width: "100%",
     height: 40,
   },
 });
@@ -61,7 +60,10 @@ const sVertical = StyleSheet.create({
 const CVC_INPUT_WIDTH = 100;
 const EXPIRY_INPUT_WIDTH = CVC_INPUT_WIDTH;
 const CARD_NUMBER_INPUT_WIDTH_OFFSET = 40;
-const CARD_NUMBER_INPUT_WIDTH = Dimensions.get("window").width - EXPIRY_INPUT_WIDTH - CARD_NUMBER_INPUT_WIDTH_OFFSET;
+const CARD_NUMBER_INPUT_WIDTH =
+  Dimensions.get("window").width -
+  EXPIRY_INPUT_WIDTH -
+  CARD_NUMBER_INPUT_WIDTH_OFFSET;
 const NAME_INPUT_WIDTH = CARD_NUMBER_INPUT_WIDTH;
 const PREVIOUS_FIELD_OFFSET = 40;
 const POSTAL_CODE_INPUT_WIDTH = 120;
@@ -91,7 +93,9 @@ export default class CreditCardInput extends Component {
     useVertical: PropTypes.boolean,
     allowScroll: PropTypes.bool,
 
-    additionalInputsProps: PropTypes.objectOf(PropTypes.shape(TextInput.propTypes)),
+    additionalInputsProps: PropTypes.objectOf(
+      PropTypes.shape(TextInput.propTypes)
+    ),
   };
 
   static defaultProps = {
@@ -104,10 +108,10 @@ export default class CreditCardInput extends Component {
       postalCode: "POSTAL CODE",
     },
     arabicLabels: {
-      number: 'رقم البطاقة',
-      expiry: 'انقضاء',
-      cvc: 'رمز الامان',
-      name: 'إسم صاحب البطاقة',
+      number: "رقم البطاقة",
+      expiry: "انقضاء",
+      cvc: "رمز الامان",
+      name: "إسم صاحب البطاقة",
     },
     placeholders: {
       name: "Full Name",
@@ -131,38 +135,61 @@ export default class CreditCardInput extends Component {
     this._focus(this.props.focused);
   };
 
-  componentWillReceiveProps = newProps => {
+  componentWillReceiveProps = (newProps) => {
     if (this.props.focused !== newProps.focused) this._focus(newProps.focused);
   };
 
-  _focus = field => {
+  _focus = (field) => {
     if (!field) return;
     const scrollResponder = this.refs.Form.getScrollResponder();
     const nodeHandle = ReactNative.findNodeHandle(this.refs[field]);
 
-    NativeModules.UIManager.measureLayoutRelativeToParent(nodeHandle,
-      e => { throw e; },
-      x => {
-        scrollResponder.scrollTo({ x: Math.max(x - PREVIOUS_FIELD_OFFSET, 0), animated: true });
+    NativeModules.UIManager.measureLayoutRelativeToParent(
+      nodeHandle,
+      (e) => {
+        throw e;
+      },
+      (x) => {
+        scrollResponder.scrollTo({
+          x: Math.max(x - PREVIOUS_FIELD_OFFSET, 0),
+          animated: true,
+        });
         this.refs[field].focus();
-      });
-  }
+      }
+    );
+  };
 
-  _inputProps = field => {
+  _inputProps = (field) => {
     const {
-      inputStyle, labelStyle, validColor, invalidColor, placeholderColor,
-      placeholders, labels, arabicLabels, values, status,
-      onFocus, onChange, onBecomeEmpty, onBecomeValid,
-      additionalInputsProps, useVertical, arabicLabelStyle,
+      inputStyle,
+      labelStyle,
+      validColor,
+      invalidColor,
+      placeholderColor,
+      placeholders,
+      labels,
+      arabicLabels,
+      values,
+      status,
+      onFocus,
+      onChange,
+      onBecomeEmpty,
+      onBecomeValid,
+      additionalInputsProps,
+      useVertical,
+      arabicLabelStyle,
     } = this.props;
-    const style = useVertical ? sVertical : sHorizontal
+    const style = useVertical ? sVertical : sHorizontal;
 
     return {
       inputStyle: [style.input, inputStyle],
       labelStyle: [style.inputLabel, labelStyle],
       arabicLabelStyle: [style.inputLabel, arabicLabelStyle],
-      validColor, invalidColor, placeholderColor,
-      ref: field, field,
+      validColor,
+      invalidColor,
+      placeholderColor,
+      ref: field,
+      field,
 
       label: labels[field],
       arabicLabel: arabicLabels[field],
@@ -170,7 +197,10 @@ export default class CreditCardInput extends Component {
       value: values[field],
       status: status[field],
 
-      onFocus, onChange, onBecomeEmpty, onBecomeValid,
+      onFocus,
+      onChange,
+      onBecomeEmpty,
+      onBecomeValid,
 
       additionalInputProps: additionalInputsProps[field],
     };
@@ -178,15 +208,27 @@ export default class CreditCardInput extends Component {
 
   render() {
     const {
-      cardImageFront, cardImageBack, inputContainerStyle,
-      values: { number, expiry, cvc, name, type }, focused,
-      allowScroll, requiresName, requiresCVC, requiresPostalCode,
-      cardScale, cardFontFamily, cardBrandIcons, useVertical, isMADA
+      cardImageFront,
+      cardImageBack,
+      inputContainerStyle,
+      values: { number, expiry, cvc, name, type },
+      focused,
+      allowScroll,
+      requiresName,
+      requiresCVC,
+      requiresPostalCode,
+      cardScale,
+      cardFontFamily,
+      cardBrandIcons,
+      useVertical,
+      isMADA,
+      isInstantBooking,
     } = this.props;
-    const styles = useVertical ? sVertical : sHorizontal
+    const styles = useVertical ? sVertical : sHorizontal;
     return (
       <View style={styles.container}>
-        <CreditCard focused={focused}
+        <CreditCard
+          focused={focused}
           brand={type}
           scale={cardScale}
           fontFamily={cardFontFamily}
@@ -197,8 +239,11 @@ export default class CreditCardInput extends Component {
           number={number}
           expiry={expiry}
           cvc={cvc}
-          isMADA={isMADA}/>
-        <ScrollView ref="Form"
+          isInstantBooking={isInstantBooking}
+          isMADA={isMADA}
+        />
+        <ScrollView
+          ref="Form"
           horizontal={useVertical ? false : true}
           vertical={useVertical ? false : true}
           keyboardShouldPersistTaps="always"
@@ -206,28 +251,71 @@ export default class CreditCardInput extends Component {
           showsHorizontalScrollIndicator={false}
           style={styles.form}
           contentContainerStyle={styles.formContainer}
-          >
-          { requiresName &&
-            <CCInput {...this._inputProps("name")}
-              containerStyle={[styles.inputContainer, inputContainerStyle, { width: '100%' }]} /> }
-          <CCInput {...this._inputProps("number")}
+        >
+          {requiresName && (
+            <CCInput
+              {...this._inputProps("name")}
+              containerStyle={[
+                styles.inputContainer,
+                inputContainerStyle,
+                { width: "100%" },
+              ]}
+            />
+          )}
+          <CCInput
+            {...this._inputProps("number")}
             keyboardType="numeric"
-            containerStyle={[styles.inputContainer, inputContainerStyle, { width: '100%' }]} />
-          <View style={[{display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}, I18nManager.isRTL && {flexDirection: 'row-reverse'}]}>
-            <CCInput {...this._inputProps("expiry")}
+            containerStyle={[
+              styles.inputContainer,
+              inputContainerStyle,
+              { width: "100%" },
+            ]}
+          />
+          <View
+            style={[
+              {
+                display: "flex",
+                flexDirection: "row",
+                width: "100%",
+                justifyContent: "space-between",
+              },
+              I18nManager.isRTL && { flexDirection: "row-reverse" },
+            ]}
+          >
+            <CCInput
+              {...this._inputProps("expiry")}
               keyboardType="numeric"
-              parentContainer={{width: '50%'}}
-              containerStyle={[styles.inputContainer, inputContainerStyle, { width: '98%'}]} />
-            { requiresCVC &&
-              <CCInput {...this._inputProps("cvc")}
-                parentContainer={{width: '50%'}}
+              parentContainer={{ width: "50%" }}
+              containerStyle={[
+                styles.inputContainer,
+                inputContainerStyle,
+                { width: "98%" },
+              ]}
+            />
+            {requiresCVC && (
+              <CCInput
+                {...this._inputProps("cvc")}
+                parentContainer={{ width: "50%" }}
                 keyboardType="numeric"
-                containerStyle={[styles.inputContainer, inputContainerStyle, { width: '98%'}]} /> }
+                containerStyle={[
+                  styles.inputContainer,
+                  inputContainerStyle,
+                  { width: "98%" },
+                ]}
+              />
+            )}
           </View>
-          { requiresPostalCode &&
-            <CCInput {...this._inputProps("postalCode")}
+          {requiresPostalCode && (
+            <CCInput
+              {...this._inputProps("postalCode")}
               keyboardType="numeric"
-              containerStyle={[styles.inputContainer, inputContainerStyle, { width: POSTAL_CODE_INPUT_WIDTH }]} /> }
+              containerStyle={[
+                styles.inputContainer,
+                inputContainerStyle,
+                { width: POSTAL_CODE_INPUT_WIDTH },
+              ]}
+            />
+          )}
         </ScrollView>
       </View>
     );
