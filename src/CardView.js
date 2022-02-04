@@ -89,12 +89,13 @@ export default class CardView extends Component {
     expiry: PropTypes.string,
     cvc: PropTypes.string,
     placeholder: PropTypes.object,
-    isInstantBooking: PropTypes.bool,
+
     scale: PropTypes.number,
     fontFamily: PropTypes.string,
     imageFront: PropTypes.number,
     imageBack: PropTypes.number,
     customIcons: PropTypes.object,
+    isInstantBooking: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -108,13 +109,13 @@ export default class CardView extends Component {
 
     scale: 1,
     fontFamily: Platform.select({ ios: "Courier", android: "monospace" }),
-    imageFront: require(`..images/${
-      isInstantBooking ? `instant` : `normal`
-    }-card.png`),
-    imageBack: require(`..images/${
-      isInstantBooking ? `instant` : `normal`
-    }-card-back.png`),
+    normalImageFront: require("../images/normal-card.png"),
+    normalImageBack: require("../images/normal-card-back.png"),
+    instantImageFront: require("../images/instant-card.png"),
+    instantImageBack: require("../images/instant-card-back.png"),
+
     isMADA: false,
+    isInstantBooking: false,
   };
 
   render() {
@@ -132,6 +133,7 @@ export default class CardView extends Component {
       scale,
       fontFamily,
       isMADA,
+      isInstantBooking,
     } = this.props;
     const Icons = { ...defaultIcons, ...customIcons };
     const isAmex = brand === "american-express";
@@ -158,7 +160,7 @@ export default class CardView extends Component {
         >
           <ImageBackground
             style={[BASE_SIZE, s.cardFace, transform]}
-            source={imageFront}
+            source={isInstantBooking ? instantImageFront : normalImageFront}
           >
             <Image
               style={[
@@ -228,7 +230,7 @@ export default class CardView extends Component {
           </ImageBackground>
           <ImageBackground
             style={[BASE_SIZE, s.cardFace, transform]}
-            source={imageBack}
+            source={isInstantBooking ? instantImageBack : normalImageBack}
           >
             <Text
               style={[
