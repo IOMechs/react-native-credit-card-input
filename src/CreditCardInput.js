@@ -234,6 +234,8 @@ export default class CreditCardInput extends Component {
           fontFamily={cardFontFamily}
           imageFront={cardImageFront}
           imageBack={cardImageBack}
+          instantImageFront={cardImageFront}
+          instantImageBack={cardImageBack}
           customIcons={cardBrandIcons}
           name={requiresName ? name : " "}
           number={number}
