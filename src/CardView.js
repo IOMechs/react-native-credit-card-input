@@ -160,7 +160,7 @@ export default class CardView extends Component {
         >
           <ImageBackground
             style={[BASE_SIZE, s.cardFace, transform]}
-            source={isInstantBooking ? instantImageBack : normalImageBack}
+            source={isInstantBooking ? instantImageFront : normalImageFront}
           >
             <Image
               style={[
