@@ -239,8 +239,8 @@ export default class CreditCardInput extends Component {
           number={number}
           expiry={expiry}
           cvc={cvc}
-          isInstantBooking={isInstantBooking}
           isMADA={isMADA}
+          isInstantBooking={isInstantBooking}
         />
         <ScrollView
           ref="Form"
