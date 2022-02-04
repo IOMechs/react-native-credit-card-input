@@ -94,6 +94,8 @@ export default class CardView extends Component {
     fontFamily: PropTypes.string,
     imageFront: PropTypes.number,
     imageBack: PropTypes.number,
+    instantImageFront: PropTypes.number,
+    InstantImageBack: PropTypes.number,
     customIcons: PropTypes.object,
     isInstantBooking: PropTypes.bool,
   };
@@ -109,10 +111,10 @@ export default class CardView extends Component {
 
     scale: 1,
     fontFamily: Platform.select({ ios: "Courier", android: "monospace" }),
-    normalImageFront: require("../images/normal-card.png"),
-    normalImageBack: require("../images/normal-card-back.png"),
-    instantImageFront: require("../images/instant-card.png"),
-    instantImageBack: require("../images/instant-card-back.png"),
+    imageFront: require("../images/normal-front.png"),
+    imageBack: require("../images/normal-back.png"),
+    instantImageFront: require("../images/instant-front.png"),
+    instantImageBack: require("../images/instant-back.png"),
 
     isMADA: false,
     isInstantBooking: false,
@@ -130,6 +132,8 @@ export default class CardView extends Component {
       placeholder,
       imageFront,
       imageBack,
+      instantImageFront,
+      instantImageBack,
       scale,
       fontFamily,
       isMADA,
@@ -160,7 +164,7 @@ export default class CardView extends Component {
         >
           <ImageBackground
             style={[BASE_SIZE, s.cardFace, transform]}
-            source={isInstantBooking ? instantImageFront : normalImageFront}
+            source={isInstantBooking ? instantImageFront : imageFront}
           >
             <Image
               style={[
@@ -230,7 +234,7 @@ export default class CardView extends Component {
           </ImageBackground>
           <ImageBackground
             style={[BASE_SIZE, s.cardFace, transform]}
-            source={isInstantBooking ? instantImageBack : normalImageBack}
+            source={isInstantBooking ? instantImageBack : imageBack}
           >
             <Text
               style={[
